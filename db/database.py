@@ -29,15 +29,22 @@ class BotDB:
         
         if not result:
             raise ValueError(f"Пользователь '{user_name}' не найден в таблице users.")
-        
         user_id = result[0]
         
         self.cursor.execute(
             "INSERT INTO users_data (user_id, operation, sum, category) VALUES (?, ?, ?, ?)",
-            (user_id, operation, value, category)
-        )
+            (user_id, operation, value, category))
         self.conn.commit()
 
+
+    def get_all_user_stat(self, user_name, first_date, second_date):
+        pass
+    
+    def get_expence_user_stat(self, user_name, first_date, second_date):
+        pass
+    
+    def get_profit_user_stat(self, user_name, first_date, second_date):
+        pass
 
     def close(self):
         self.conn.close()

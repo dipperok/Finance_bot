@@ -3,7 +3,7 @@ from aiogram.types import Message
 from aiogram.fsm.storage.memory import MemoryStorage
 
 from BOT_TOKEN import TOKEN
-from bot.handlers import start, add_expense, add_profit, user_settings, menu
+from bot.handlers import start, add_expense, add_profit, user_settings, menu, stats
 
 async def main():
     bot = Bot(TOKEN)
@@ -14,6 +14,7 @@ async def main():
         add_profit.router,
         user_settings.router,
         menu.router,
+        stats.router
     )
     await dp.start_polling(bot)
 
