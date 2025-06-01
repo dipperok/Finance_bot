@@ -1,5 +1,4 @@
 from aiogram.fsm.state import StatesGroup, State
 
-class AddExpense(StatesGroup):
+class AddProfit(StatesGroup):
     amount = State()
-    category = State()

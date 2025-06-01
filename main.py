@@ -3,14 +3,15 @@ from aiogram.types import Message
 from aiogram.fsm.storage.memory import MemoryStorage
 
 from BOT_TOKEN import TOKEN
-from bot.handlers import start, add_expense
+from bot.handlers import start, add_expense, add_profit
 
 async def main():
     bot = Bot(TOKEN)
     dp = Dispatcher(storage=MemoryStorage())
     dp.include_routers(
         start.router,
-        add_expense.router
+        add_expense.router,
+        add_profit.router
     )
     await dp.start_polling(bot)
 
