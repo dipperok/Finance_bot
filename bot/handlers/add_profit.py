@@ -19,27 +19,3 @@ async def handle_income_amount(message: Message, state: FSMContext):
     db.add_record(message.from_user.username, '+', amount, 'Доход')
     await message.answer(f"Доход {amount}₽ добавлен.")
     await state.clear()
-
-
-'''
-@router.message(AddProfit.amount)
-async def get_amount(message: Message, state: FSMContext):
-    try:
-        amount = float(message.text)
-    except ValueError:
-        return await message.answer("Введите число.")
-    
-    await state.update_data(amount=amount)
-    
-    
-    
-    
-@router.callback_query()
-async def add_profit(callback: CallbackQuery, state: FSMContext):
-    data = await state.get_data()
-    amount = data.get("amount")
-    db.add_record(callback.from_user.username, '+', amount, 'profit')
-    await callback.message.edit_text(f"Доход {amount}{db.get_currency(callback.from_user.username)[0]} добавлен!")
-    await callback.answer()
-    await state.clear()
-'''
