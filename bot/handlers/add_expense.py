@@ -31,8 +31,8 @@ async def category_chosen(callback: CallbackQuery, state: FSMContext):
     amount = data.get("amount")
     category = callback.data.replace("cat_", "")
     
-    await db.add_record(callback.from_user.id, amount, category)
+    db.add_record(callback.from_user.username, '-', amount, category)
     
-    await callback.message.edit_text(f"Расход {amount}₽ на '{category}' добавлен!")
+    await callback.message.edit_text(f"Расход {amount}{db.get_currency(callback.from_user.username)[0]} на '{category}' добавлен!")
     await callback.answer()
     await state.clear()

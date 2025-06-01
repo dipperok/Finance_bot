@@ -16,12 +16,27 @@ class BotDB:
             categories_str = result[0]
             return [category.strip() for category in categories_str.split(",") if category.strip()]
         return []
+    
+    def get_currency(self, user_name):
+        self.cursor.execute(f"SELECT currency FROM users WHERE user_name = ?", (user_name,))
+        result = self.cursor.fetchone()
+        return result
 
     def add_record(self, user_name, operation, value, category):
-        """Создать запись о расходе/доходе (-/+)"""
-        self.cursor.execute(f"INSERT INTO users_data (user_name, operation, value, category) VALUES (?, ?, ?, ?)",
-        (user_name, operation, value, category))
-        return self.conn.commit()
+        """Создать запись о расходе/доходе (-/+) с использованием user_id"""
+        self.cursor.execute("SELECT user_id FROM users WHERE user_name = ?", (user_name,))
+        result = self.cursor.fetchone()
+        
+        if not result:
+            raise ValueError(f"Пользователь '{user_name}' не найден в таблице users.")
+        
+        user_id = result[0]
+        
+        self.cursor.execute(
+            "INSERT INTO users_data (user_id, operation, sum, category) VALUES (?, ?, ?, ?)",
+            (user_id, operation, value, category)
+        )
+        self.conn.commit()
 
 
     def close(self):
