@@ -2,7 +2,7 @@ from aiogram import Router, F
 from aiogram.types import Message, CallbackQuery
 from aiogram.filters import Command, StateFilter
 from aiogram.fsm.context import FSMContext
-from bot.states.add_profit import AddProfit
+from bot.states.add_profit_states import AddProfit
 from db.database import BotDB
 
 db = BotDB('db/db.sqlite')

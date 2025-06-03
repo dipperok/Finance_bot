@@ -14,7 +14,7 @@ async def main():
         add_profit.router,
         user_settings.router,
         menu.router,
-        stats.router
+        stats.router,
     )
     await dp.start_polling(bot)
 
