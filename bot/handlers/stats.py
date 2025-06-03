@@ -3,13 +3,43 @@ from aiogram.types import Message, CallbackQuery
 from aiogram.filters import Command, StateFilter
 from aiogram.fsm.context import FSMContext
 from bot.states.add_expense_states import AddExpense
-from db.database import BotDB
+from db.database import BotDB, db_path
 from bot.keyboards import stats_menu
+from datetime import datetime
+from dateutil.relativedelta import relativedelta
 
 router = Router()
-db = BotDB('db/db.sqlite')
+db = BotDB(db_path)
 
 
+@router.message(lambda msg: msg.text == "📊 Статистика за прошлый месяц")
+async def cmd_start(message: Message):
+    last_month = (datetime.now() - relativedelta(months=1)).strftime('%m.%Y')
+    stats_this_mounth = db.get_all_user_stat(message.from_user.username, last_month, last_month)
+    categories = '\n'.join([f"{key}: {value}" for key, value in stats_this_mounth[2].items()])
+    
+    await message.answer(f'Статистика за этот месяц:\nДоходы: {stats_this_mounth[0]}\nРасходы: {stats_this_mounth[1]}\n\nРасходы по категориями:\n{categories}')
+
+@router.message(lambda msg: msg.text == "📈 Статистика за этот месяц")
+async def cmd_start(message: Message):
+    this_mounth = datetime.now().strftime('%m.%Y')
+    stats_this_mounth = db.get_all_user_stat(message.from_user.username, this_mounth, this_mounth)
+    categories = '\n'.join([f"{key}: {value}" for key, value in stats_this_mounth[2].items()])
+    
+    await message.answer(f'Статистика за этот месяц:\nДоходы: {stats_this_mounth[0]}\nРасходы: {stats_this_mounth[1]}\n\nРасходы по категориями:\n{categories}')
+    
+@router.message(lambda msg: msg.text == "📋 Статистика за всё время")
+async def cmd_start(message: Message):
+    all_period = db.get_all_period(message.from_user.username)
+    stats_this_mounth = db.get_all_user_stat(message.from_user.username, all_period[0], all_period[1])
+    categories = '\n'.join([f"{key}: {value}" for key, value in stats_this_mounth[2].items()])
+    
+    await message.answer(f'Статистика за этот месяц:\nДоходы: {stats_this_mounth[0]}\nРасходы: {stats_this_mounth[1]}\n\nРасходы по категориями:\n{categories}')
+
+
+@router.message(lambda msg: msg.text == "📅 Статистика за период")
+async def cmd_start(message: Message):
+    pass
 
 
 

@@ -33,20 +33,23 @@ stats_menu = ReplyKeyboardMarkup(
     keyboard=[
         [KeyboardButton(text="↩ Назад в меню")],
         [KeyboardButton(text="🧾 Отчёты")],
-        [KeyboardButton(text="📉 Статистика трат")],
-        [KeyboardButton(text="📈 Статистика доходов")],
-        [KeyboardButton(text="📊 Общая статистика")]
+        [KeyboardButton(text="📅 Статистика за период")],
+        [KeyboardButton(text="📊 Статистика за прошлый месяц")],
+        [KeyboardButton(text="📈 Статистика за этот месяц")],
+        [KeyboardButton(text="📋 Статистика за всё время")]
     ],
     resize_keyboard=True
 )
 
+'''
 reports = ReplyKeyboardMarkup(
     keyboard=[
         [KeyboardButton(text="↩ Назад в меню")],
         [KeyboardButton(text="🧾 Отчёты")],
-        [KeyboardButton(text="📉 Статистика трат")],
-        [KeyboardButton(text="📊 Общая статистика")],
-        [KeyboardButton(text="📈 Статистика доходов")]
+        [KeyboardButton(text="📅 Статистика за период")],
+        [KeyboardButton(text="📊 Статистика за прошлый месяц")],
+        [KeyboardButton(text="📈 Статистика за этот месяц")]
     ],
     resize_keyboard=True
 )
+'''

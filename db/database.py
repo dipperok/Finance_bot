@@ -2,6 +2,8 @@ import sqlite3
 from datetime import datetime, timedelta
 from typing import Tuple, Dict, Union
 
+db_path = 'db/db.sqlite'
+
 class BotDB:
     def __init__(self, db_file):
         self.conn = sqlite3.connect(db_file)
@@ -10,7 +12,17 @@ class BotDB:
     def user_exists(self, user_name):
         result = self.cursor.execute(f"SELECT user_name FROM users WHERE user_name = ?", (user_name,))
         return bool(len(result.fetchall()))
-
+    
+    def get_first_message_status(self, user_name):
+        self.cursor.execute(f"SELECT fst_msg_status FROM users WHERE user_name = ?", (user_name,))
+        result = self.cursor.fetchone()
+        if result[0]:
+            return True
+        else:
+            self.cursor.execute("UPDATE users SET fst_msg_status = 1 WHERE user_name = ?", (user_name,))
+            self.conn.commit()
+            return False
+            
     def get_categories(self, user_name):
         self.cursor.execute(f"SELECT categories FROM users WHERE user_name = ?", (user_name,))
         result = self.cursor.fetchone()
@@ -38,6 +50,20 @@ class BotDB:
             (user_id, operation, value, category))
         self.conn.commit()
 
+    def get_all_period(self, user_name):
+        self.cursor.execute("""SELECT user_id FROM users WHERE user_name = ? """, (user_name,))
+        user_id_result = self.cursor.fetchone()
+        
+        user_id = user_id_result[0]
+        
+        self.cursor.execute(""" SELECT MIN(date_add) FROM users_data WHERE user_id = ? """, (user_id,))
+        first_date = self.cursor.fetchone()[0]
+        
+        self.cursor.execute("""SELECT MAX(date_add) FROM users_data WHERE user_id = ? """, (user_id,))
+        last_date = self.cursor.fetchone()[0]
+
+        return first_date, last_date
+    
 
     def get_all_user_stat(self, user_name: str, first_date: str, last_date: str) -> Union[Tuple[int, int, Dict[str, int]], None]:
         def parse_date_range(first_date: str, last_date: str) -> Tuple[str, str]:
@@ -105,11 +131,6 @@ class BotDB:
 
         return sum_plus, sum_minus, category_totals
     
-    def get_expence_user_stat(self, user_name, first_date, second_date):
-        pass
-    
-    def get_profit_user_stat(self, user_name, first_date, second_date):
-        pass
 
     def close(self):
         self.conn.close()

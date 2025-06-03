@@ -1,7 +1,7 @@
 from aiogram import Router
 from aiogram.types import Message
 from aiogram.filters import CommandStart
-from db.database import BotDB
+from db.database import BotDB, db_path
 from bot.keyboards import main_menu, stats_menu, settings_menu
 
 router = Router()
