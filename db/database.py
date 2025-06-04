@@ -9,9 +9,11 @@ class BotDB:
         self.conn = sqlite3.connect(db_file)
         self.cursor = self.conn.cursor()
 
+
     def user_exists(self, user_name):
         result = self.cursor.execute(f"SELECT user_name FROM users WHERE user_name = ?", (user_name,))
         return bool(len(result.fetchall()))
+    
     
     def get_first_message_status(self, user_name):
         self.cursor.execute(f"SELECT fst_msg_status FROM users WHERE user_name = ?", (user_name,))
@@ -23,6 +25,7 @@ class BotDB:
             self.conn.commit()
             return False
             
+            
     def get_categories(self, user_name):
         self.cursor.execute(f"SELECT categories FROM users WHERE user_name = ?", (user_name,))
         result = self.cursor.fetchone()
@@ -31,10 +34,12 @@ class BotDB:
             return [category.strip() for category in categories_str.split(",") if category.strip()]
         return []
     
+    
     def get_currency(self, user_name):
         self.cursor.execute(f"SELECT currency FROM users WHERE user_name = ?", (user_name,))
         result = self.cursor.fetchone()
         return result
+
 
     def add_record(self, user_name, operation, value, category):
         """Создать запись о расходе/доходе (-/+) с использованием user_id"""
@@ -50,18 +55,29 @@ class BotDB:
             (user_id, operation, value, category))
         self.conn.commit()
 
-    def get_all_period(self, user_name):
-        self.cursor.execute("""SELECT user_id FROM users WHERE user_name = ? """, (user_name,))
-        user_id_result = self.cursor.fetchone()
-        
-        user_id = user_id_result[0]
-        
-        self.cursor.execute(""" SELECT MIN(date_add) FROM users_data WHERE user_id = ? """, (user_id,))
-        first_date = self.cursor.fetchone()[0]
-        
-        self.cursor.execute("""SELECT MAX(date_add) FROM users_data WHERE user_id = ? """, (user_id,))
-        last_date = self.cursor.fetchone()[0]
 
+    def get_all_period(self, user_name):
+        self.cursor.execute("SELECT user_id FROM users WHERE user_name = ?", (user_name,))
+        user_id_result = self.cursor.fetchone()
+
+        if not user_id_result:
+            print(f"Пользователь '{user_name}' не найден.")
+            return None
+
+        user_id = user_id_result[0]
+
+        self.cursor.execute("SELECT MIN(date_add) FROM users_data WHERE user_id = ?", (user_id,))
+        first_date_raw = self.cursor.fetchone()[0]
+        self.cursor.execute("SELECT MAX(date_add) FROM users_data WHERE user_id = ?", (user_id,))
+        last_date_raw = self.cursor.fetchone()[0]
+
+        if not first_date_raw or not last_date_raw:
+            print(f"Для пользователя '{user_name}' нет записей в таблице users_data.")
+            return None
+
+        first_date = datetime.strptime(first_date_raw, "%Y-%m-%d %H:%M:%S").strftime("%d.%m.%Y")
+        last_date = datetime.strptime(last_date_raw, "%Y-%m-%d %H:%M:%S").strftime("%d.%m.%Y")
+        
         return first_date, last_date
     
 
