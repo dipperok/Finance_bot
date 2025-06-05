@@ -5,6 +5,7 @@ from aiogram.fsm.context import FSMContext
 from bot.states.add_profit_states import AddProfit
 from db.database import BotDB, db_path
 
+
 db = BotDB(db_path)
 router = Router()
 
