@@ -5,6 +5,8 @@ from aiogram.fsm.context import FSMContext
 from bot.states.add_expense_states import AddExpense
 from db.database import BotDB, db_path
 from bot.keyboards import get_category_keyboard
+from bot.keyboards import main_menu
+
 
 db = BotDB(db_path)
 router = Router()
@@ -33,6 +35,6 @@ async def category_chosen(callback: CallbackQuery, state: FSMContext):
     
     db.add_record(callback.from_user.username, '-', amount, category)
     
-    await callback.message.edit_text(f"Расход {amount}{db.get_currency(callback.from_user.username)[0]} на '{category}' добавлен!")
+    await callback.message.edit_text(f"Расход {amount}{db.get_currency(callback.from_user.username)[0]} на '{category}' добавлен!", reply_markup=main_menu)
     await callback.answer()
     await state.clear()
