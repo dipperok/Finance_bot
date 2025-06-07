@@ -7,7 +7,6 @@ from db.database import BotDB, db_path
 from bot.keyboards import main_menu
 
 
-
 db = BotDB(db_path)
 router = Router()
 

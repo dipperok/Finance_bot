@@ -2,6 +2,7 @@ import sqlite3
 from datetime import datetime, timedelta
 from typing import Tuple, Dict, Union
 
+#db_path = 'db/db-test.sqlite'
 db_path = 'db/db.sqlite'
 
 class BotDB:
@@ -79,7 +80,7 @@ class BotDB:
         last_date = datetime.strptime(last_date_raw, "%Y-%m-%d %H:%M:%S").strftime("%d.%m.%Y")
         
         return first_date, last_date
-    
+
 
     def get_all_user_stat(self, user_name: str, first_date: str, last_date: str) -> Union[Tuple[int, int, Dict[str, int]], None]:
         def parse_date_range(first_date: str, last_date: str) -> Tuple[str, str]:
@@ -122,7 +123,7 @@ class BotDB:
             SELECT operation, SUM(sum)
             FROM users_data
             WHERE user_id = ?
-              AND date(date_add) BETWEEN ? AND ?
+            AND date(date_add) BETWEEN ? AND ?
             GROUP BY operation
         """, (user_id, date_start, date_end))
 
@@ -130,23 +131,24 @@ class BotDB:
         sum_minus = 0
         for op, total in self.cursor.fetchall():
             if op == "+":
-                sum_plus = total or 0
+                sum_plus = int(total or 0)
             elif op == "-":
-                sum_minus = total or 0
+                sum_minus = int(total or 0)
 
-        # Получаем суммы по категориям
+        # Получаем суммы по категориям только для расходов ("-")
         self.cursor.execute("""
             SELECT category, SUM(sum)
             FROM users_data
             WHERE user_id = ?
-              AND date(date_add) BETWEEN ? AND ?
+            AND date(date_add) BETWEEN ? AND ?
+            AND operation = '-'
             GROUP BY category
         """, (user_id, date_start, date_end))
 
-        category_totals = {row[0]: row[1] for row in self.cursor.fetchall()}
+        category_totals = {row[0]: int(row[1]) for row in self.cursor.fetchall()}
 
         return sum_plus, sum_minus, category_totals
-    
+
 
     def close(self):
         self.conn.close()

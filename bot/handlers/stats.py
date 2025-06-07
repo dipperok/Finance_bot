@@ -20,13 +20,33 @@ async def cmd_start(message: Message):
     
     await message.answer(f'Статистика за этот месяц:\nДоходы: {stats_this_mounth[0]}\nРасходы: {stats_this_mounth[1]}\n\nРасходы по категориями:\n{categories}')
 
+
 @router.message(lambda msg: msg.text == "📈 Статистика за этот месяц")
 async def cmd_start(message: Message):
-    this_mounth = datetime.now().strftime('%m.%Y')
-    stats_this_mounth = db.get_all_user_stat(message.from_user.username, this_mounth, this_mounth)
-    categories = '\n'.join([f"{key}: {value}" for key, value in stats_this_mounth[2].items()])
+    currency = "₽"
+    this_month = datetime.now().strftime('%m.%Y')
+    stats_this_month = db.get_all_user_stat(message.from_user.username, this_month, this_month)
+
+    if not stats_this_month:
+        await message.answer("Статистика не найдена.")
+        return
+
+    incomes, expenses, categories_data = stats_this_month
+
+    def format_number(n: int) -> str:
+        return "{:,}".format(n).replace(",", " ")
+
+    categories_text = '\n'.join(
+        f"*{key}*: `{format_number(value)}{currency}`" for key, value in categories_data.items()
+    )
+
+    await message.answer(
+        f'*Статистика за этот месяц:*\n'
+        f'*Доходы*: `{format_number(incomes)}{currency}`\n'
+        f'*Расходы*: `{format_number(expenses)}{currency}`\n\n'
+        f'*Расходы по категориям:*\n{categories_text}',
+        parse_mode="Markdown")
     
-    await message.answer(f'Статистика за этот месяц:\nДоходы: {stats_this_mounth[0]}\nРасходы: {stats_this_mounth[1]}\n\nРасходы по категориями:\n{categories}')
     
 @router.message(lambda msg: msg.text == "📋 Статистика за всё время")
 async def cmd_start(message: Message):
