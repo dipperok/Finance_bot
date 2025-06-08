@@ -19,5 +19,5 @@ async def handle_add_income(message: Message, state: FSMContext):
 async def handle_income_amount(message: Message, state: FSMContext):
     amount = float(message.text)
     db.add_record(message.from_user.username, '+', amount, 'Доход')
-    await message.answer(f"Доход {amount}₽ добавлен.", reply_markup=main_menu)
+    await message.answer(f"Доход {amount}{db.get_currency(message.from_user.username)[0]} добавлен.", reply_markup=main_menu)
     await state.clear()

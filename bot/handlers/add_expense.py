@@ -5,7 +5,6 @@ from aiogram.fsm.context import FSMContext
 from bot.states.add_expense_states import AddExpense
 from db.database import BotDB, db_path
 from bot.keyboards import get_category_keyboard
-from bot.keyboards import main_menu
 
 
 db = BotDB(db_path)
