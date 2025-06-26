@@ -40,16 +40,3 @@ stats_menu = ReplyKeyboardMarkup(
     ],
     resize_keyboard=True
 )
-
-'''
-reports = ReplyKeyboardMarkup(
-    keyboard=[
-        [KeyboardButton(text="↩ Назад в меню")],
-        [KeyboardButton(text="🧾 Отчёты")],
-        [KeyboardButton(text="📅 Статистика за период")],
-        [KeyboardButton(text="📊 Статистика за прошлый месяц")],
-        [KeyboardButton(text="📈 Статистика за этот месяц")]
-    ],
-    resize_keyboard=True
-)
-'''
