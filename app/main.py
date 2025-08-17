@@ -1,7 +1,8 @@
+
 from aiogram import Bot, Dispatcher
 from aiogram.fsm.storage.memory import MemoryStorage
 
-from BOT_TOKEN import TOKEN
+from BOT_TOKEN import TOKEN_PSI
 from bot.handlers import start, add_expense, add_profit, user_settings, menu, stats, reports
 from bot.bot_status import is_db_test_print
 from db.database import db_path
@@ -9,7 +10,7 @@ from db.database import db_path
 is_db_test_print(db_path)
 
 async def main():
-    bot = Bot(TOKEN)
+    bot = Bot(TOKEN_PSI)
     dp = Dispatcher(storage=MemoryStorage())
     dp.include_routers(
         start.router,
