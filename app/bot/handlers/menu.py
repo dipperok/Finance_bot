@@ -2,6 +2,7 @@ from aiogram import Router
 from aiogram.types import Message
 from bot.keyboards import main_menu, stats_menu, settings_menu
 
+
 router = Router()
 
 @router.message(lambda msg: msg.text == "↩ Назад в меню")
