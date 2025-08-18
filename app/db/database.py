@@ -2,7 +2,7 @@ import sqlite3
 from datetime import datetime, timedelta
 from typing import Tuple, Dict, Union
 
-db_path = 'db/db.sqlite'
+db_path = 'db/db-psi.sqlite'
 #db_path = '/app/app/db/db.sqlite'
 
 class BotDB:
@@ -148,7 +148,10 @@ class BotDB:
         category_totals = {row[0]: int(row[1]) for row in self.cursor.fetchall()}
 
         return sum_plus, sum_minus, category_totals
-
+    
+    def test_date_format(self, record_id):
+        result = db.cursor.execute("""SELECT date_add FROM users_data WHERE id = ?""", (record_id,))
+        return result.fetchall()
 
     def close(self):
         self.conn.close()
@@ -158,3 +161,4 @@ if __name__ == "__main__":
     db = BotDB('db.sqlite')
     plus, minus, categories = db.get_all_user_stat('dipperok', '06.2025', '06.2025')
     print(plus, minus, categories)
+    print(db.test_date_format(1))
