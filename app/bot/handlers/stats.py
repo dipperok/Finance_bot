@@ -7,6 +7,9 @@ from db.database import BotDB, db_path
 from bot.keyboards import stats_menu
 from datetime import datetime
 from dateutil.relativedelta import relativedelta
+import matplotlib.pyplot as plt
+import pandas as pd
+from io import BytesIO
 
 router = Router()
 db = BotDB(db_path)
