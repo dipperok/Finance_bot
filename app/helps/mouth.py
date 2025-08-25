@@ -18,4 +18,5 @@ def num_to_mouth(num):
         num = 12
     return mouth_dict[num]
 
-print(num_to_mouth(11))
+if __name__ == "__main__":
+    print(num_to_mouth(11))

@@ -10,6 +10,8 @@ from dateutil.relativedelta import relativedelta
 import matplotlib.pyplot as plt
 import pandas as pd
 from io import BytesIO
+from helps.mouth import num_to_mouth
+
 
 router = Router()
 db = BotDB(db_path)
@@ -35,7 +37,7 @@ async def cmd_start(message: Message):
     )
 
     await message.answer(
-        f'*Статистика за этот месяц:*\n'
+        f'*Статистика за {num_to_mouth(int(datetime.now().strftime('%m'))-1)}*\n'
         f'*Доходы*: `{format_number(incomes)}{currency}`\n'
         f'*Расходы*: `{format_number(expenses)}{currency}`\n\n'
         f'*Расходы по категориям:*\n{categories_text}',
@@ -62,7 +64,7 @@ async def cmd_start(message: Message):
     )
 
     await message.answer(
-        f'*Статистика за этот месяц:*\n'
+        f'*Статистика за {num_to_mouth(int(datetime.now().strftime('%m')))}:*\n'
         f'*Доходы*: `{format_number(incomes)}{currency}`\n'
         f'*Расходы*: `{format_number(expenses)}{currency}`\n\n'
         f'*Расходы по категориям:*\n{categories_text}',
@@ -89,7 +91,7 @@ async def cmd_start(message: Message):
     )
 
     await message.answer(
-        f'*Статистика за этот месяц:*\n'
+        f'*Статистика за всё время:*\n'
         f'*Доходы*: `{format_number(incomes)}{currency}`\n'
         f'*Расходы*: `{format_number(expenses)}{currency}`\n\n'
         f'*Расходы по категориям:*\n{categories_text}',
