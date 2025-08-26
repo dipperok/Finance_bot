@@ -10,11 +10,19 @@ from dateutil.relativedelta import relativedelta
 import matplotlib.pyplot as plt
 import pandas as pd
 from io import BytesIO
-from helps.mouth import num_to_mouth
 
 router = Router()
 db = BotDB(db_path)
 
+mouth_dict = {
+    1: 'Январь', 2: 'Февраль', 3: 'Март', 4: 'Апрель', 5: 'Май', 6: 'Июнь', 
+    7: 'Июль', 8: 'Август', 9: 'Сентябрь', 10: 'Октябрь', 11: 'Ноябрь', 12: 'Декабрь'
+}
+
+def num_to_mouth(num):
+    if num == 0:
+        num = 12
+    return mouth_dict[num]
 
 @router.message(lambda msg: msg.text == "📊 Статистика за прошлый месяц")
 async def cmd_start(message: Message):
