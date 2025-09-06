@@ -148,10 +148,33 @@ class BotDB:
         category_totals = {row[0]: int(row[1]) for row in self.cursor.fetchall()}
 
         return sum_plus, sum_minus, category_totals
-    
-    def test_date_format(self, record_id):
-        result = db.cursor.execute("""SELECT date_add FROM users_data WHERE id = ?""", (record_id,))
-        return result.fetchall()
+
+
+    def del_last_record(self, user_name):
+        self.cursor.execute("SELECT user_id FROM users WHERE user_name = ?", (user_name,))
+        user_id_result = self.cursor.fetchone()
+        if not user_id_result:
+            return False
+        
+        user_id = user_id_result[0]
+
+        self.cursor.execute(
+            "SELECT id FROM users_data WHERE user_id = ? ORDER BY id DESC LIMIT 1",
+            (user_id,)
+        )
+        
+        last_record = self.cursor.fetchone()
+        
+        if not last_record:
+            return False
+
+        last_id = last_record[0]
+        
+        self.cursor.execute("DELETE FROM users_data WHERE id = ?", (last_id,))
+        self.conn.commit()
+
+        return True
+
 
     def close(self):
         self.conn.close()
@@ -161,4 +184,3 @@ if __name__ == "__main__":
     db = BotDB('db.sqlite')
     plus, minus, categories = db.get_all_user_stat('dipperok', '06.2025', '06.2025')
     print(plus, minus, categories)
-    print(db.test_date_format(1))
