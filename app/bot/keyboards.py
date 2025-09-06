@@ -14,6 +14,7 @@ main_menu = ReplyKeyboardMarkup(
         [KeyboardButton(text="➖ Добавить расход")],
         [KeyboardButton(text="➕ Добавить доход")],
         [KeyboardButton(text="📊 Статистика")],
+        [KeyboardButton(text="🗑 Удалить последнюю запись")],
         [KeyboardButton(text="⚙ Настроки")]
     ],
     resize_keyboard=True

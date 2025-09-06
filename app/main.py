@@ -2,7 +2,7 @@ from aiogram import Bot, Dispatcher
 from aiogram.fsm.storage.memory import MemoryStorage
 
 from BOT_TOKEN import TOKEN
-from bot.handlers import start, add_expense, add_profit, user_settings, menu, stats, reports
+from bot.handlers import start, add_expense, add_profit, user_settings, menu, stats, reports, del_last_record
 from bot.bot_status import is_db_test_print
 from db.database import db_path
 
@@ -18,7 +18,8 @@ async def main():
         user_settings.router,
         menu.router,
         stats.router,
-        reports.router
+        reports.router,
+        del_last_record.router
     )
     await dp.start_polling(bot)
 
