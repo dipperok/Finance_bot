@@ -4,10 +4,6 @@ from aiogram.fsm.storage.memory import MemoryStorage
 
 from BOT_TOKEN import TOKEN_PSI
 from bot.handlers import start, add_expense, add_profit, user_settings, menu, stats, reports, del_last_record
-from bot.bot_status import is_db_test_print
-from db.database import db_path
-
-is_db_test_print(db_path)
 
 async def main():
     bot = Bot(TOKEN_PSI)

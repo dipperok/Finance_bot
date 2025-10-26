@@ -2,8 +2,8 @@ import sqlite3
 from datetime import datetime, timedelta
 from typing import Tuple, Dict, Union
 
-db_path = 'db/db-psi.sqlite'
-#db_path = '/app/app/db/db.sqlite'
+#db_path = 'db/db-psi.sqlite'
+db_path = '/app/app/db/db.sqlite'
 
 class BotDB:
     def __init__(self, db_file):

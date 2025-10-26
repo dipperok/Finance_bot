@@ -3,11 +3,17 @@ from aiogram.types import Message, CallbackQuery
 from aiogram.filters import Command, StateFilter
 from aiogram.fsm.context import FSMContext
 from bot.states.add_profit_states import AddProfit
-from db.database import BotDB, db_path
 from bot.keyboards import main_menu
 
+from db.db_postgress import BotDBpg, DB_NAME, DB_USER, DB_PASS, DB_HOST, DB_PORT
+db = BotDBpg(
+        dbname=DB_NAME,
+        user=DB_USER,
+        password=DB_PASS,
+        host=DB_HOST,
+        port=DB_PORT
+    )
 
-db = BotDB(db_path)
 router = Router()
 
 @router.message(lambda msg: msg.text == "➕ Добавить доход")

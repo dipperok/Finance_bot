@@ -3,17 +3,23 @@ from aiogram.types import Message, CallbackQuery
 from aiogram.filters import Command, StateFilter
 from aiogram.fsm.context import FSMContext
 from bot.states.add_expense_states import AddExpense
-from db.database import BotDB, db_path
 from bot.keyboards import stats_menu
 from datetime import datetime
 from dateutil.relativedelta import relativedelta
 import matplotlib.pyplot as plt
 import pandas as pd
 from io import BytesIO
+from db.db_postgress import BotDBpg, DB_NAME, DB_USER, DB_PASS, DB_HOST, DB_PORT
 
+db = BotDBpg(
+        dbname=DB_NAME,
+        user=DB_USER,
+        password=DB_PASS,
+        host=DB_HOST,
+        port=DB_PORT
+    )
 
 router = Router()
-db = BotDB(db_path)
 
 mouth_dict = {
     1: 'Январь', 2: 'Февраль', 3: 'Март', 4: 'Апрель', 5: 'Май', 6: 'Июнь', 

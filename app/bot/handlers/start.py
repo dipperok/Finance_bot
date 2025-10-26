@@ -1,11 +1,18 @@
 from aiogram import Router
 from aiogram.types import Message
 from aiogram.filters import CommandStart
-from db.database import BotDB, db_path
 from bot.keyboards import main_menu
+from db.db_postgress import BotDBpg, DB_NAME, DB_USER, DB_PASS, DB_HOST, DB_PORT
+
+db = BotDBpg(
+        dbname=DB_NAME,
+        user=DB_USER,
+        password=DB_PASS,
+        host=DB_HOST,
+        port=DB_PORT
+    )
 
 router = Router()
-db = BotDB(db_path)
 
 @router.message(CommandStart())
 async def cmd_start(message: Message):

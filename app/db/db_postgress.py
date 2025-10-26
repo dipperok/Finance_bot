@@ -2,10 +2,17 @@ import psycopg2
 from psycopg2.extras import RealDictCursor
 from datetime import datetime, timedelta
 from typing import Tuple, Dict, Union
+import os
+
+DB_NAME = os.environ.get('DB_NAME')
+DB_USER = os.environ.get('DB_USER')
+DB_PASS = os.environ.get('DB_PASS')
+DB_HOST = os.environ.get('DB_HOST')
+DB_PORT = os.environ.get('DB_PORT')
 
 
 class BotDBpg:
-    def __init__(self, dbname, user, password, host='localhost', port=5432):
+    def __init__(self, dbname, user, password, host, port):
         """
         Подключение к PostgreSQL
         """
@@ -47,9 +54,9 @@ class BotDBpg:
         return []
 
     def get_currency(self, user_name: str):
-        self.cursor.execute("SELECT currence FROM users WHERE user_name = %s", (user_name,))
+        self.cursor.execute("SELECT currency FROM users WHERE user_name = %s", (user_name,))
         result = self.cursor.fetchone()
-        return result["currence"] if result else None
+        return result["currency"] if result else None
 
     # ---------- Работа с записями ----------
 
@@ -64,7 +71,7 @@ class BotDBpg:
         user_id = result["user_id"]
 
         self.cursor.execute("""
-            INSERT INTO users_data (user_ud, operation, sum, category, date_add)
+            INSERT INTO users_data (user_id, operation, sum, category, date_add)
             VALUES (%s, %s, %s, %s, NOW())
         """, (user_id, operation, value, category))
         self.conn.commit()
@@ -79,7 +86,7 @@ class BotDBpg:
 
         user_id = user_id_result["user_id"]
 
-        self.cursor.execute("SELECT MIN(date_add) AS first_date, MAX(date_add) AS last_date FROM users_data WHERE user_ud = %s", (user_id,))
+        self.cursor.execute("SELECT MIN(date_add) AS first_date, MAX(date_add) AS last_date FROM users_data WHERE user_id = %s", (user_id,))
         result = self.cursor.fetchone()
 
         if not result or not result["first_date"] or not result["last_date"]:
@@ -130,7 +137,7 @@ class BotDBpg:
         self.cursor.execute("""
             SELECT operation, SUM(sum) AS total
             FROM users_data
-            WHERE user_ud = %s
+            WHERE user_id = %s
               AND date_add::date BETWEEN %s AND %s
             GROUP BY operation
         """, (user_id, date_start, date_end))
@@ -147,7 +154,7 @@ class BotDBpg:
         self.cursor.execute("""
             SELECT category, SUM(sum) AS total
             FROM users_data
-            WHERE user_ud = %s
+            WHERE user_id = %s
               AND date_add::date BETWEEN %s AND %s
               AND operation = '-'
             GROUP BY category
@@ -165,7 +172,7 @@ class BotDBpg:
 
         user_id = user_id_result["user_id"]
 
-        self.cursor.execute("SELECT id FROM users_data WHERE user_ud = %s ORDER BY id DESC LIMIT 1", (user_id,))
+        self.cursor.execute("SELECT id FROM users_data WHERE user_id = %s ORDER BY id DESC LIMIT 1", (user_id,))
         last_record = self.cursor.fetchone()
 
         if not last_record:
@@ -184,11 +191,11 @@ class BotDBpg:
 
 if __name__ == "__main__":
     db = BotDBpg(
-        dbname="finance_bot",
-        user="finance_user",
-        password="finance_pass",
-        host="localhost",
-        port=5432
+        dbname=DB_NAME,
+        user=DB_USER,
+        password=DB_PASS,
+        host=DB_HOST,
+        port=DB_PORT
     )
     plus, minus, categories = db.get_all_user_stat('dipperok', '07.2025', '07.2025')
     print(plus, minus, categories)
