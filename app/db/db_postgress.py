@@ -4,7 +4,7 @@ from datetime import datetime, timedelta
 from typing import Tuple, Dict, Union
 
 
-class BotDB:
+class BotDBpg:
     def __init__(self, dbname, user, password, host='localhost', port=5432):
         """
         Подключение к PostgreSQL
@@ -183,13 +183,13 @@ class BotDB:
 
 
 if __name__ == "__main__":
-    db = BotDB(
-        dbname="finance_db",
+    db = BotDBpg(
+        dbname="finance_bot",
         user="finance_user",
         password="finance_pass",
         host="localhost",
         port=5432
     )
-    plus, minus, categories = db.get_all_user_stat('dipperok', '06.2025', '06.2025')
+    plus, minus, categories = db.get_all_user_stat('dipperok', '07.2025', '07.2025')
     print(plus, minus, categories)
     db.close()
