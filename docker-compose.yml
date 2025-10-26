@@ -1,0 +1,9 @@
+services:
+  bot:
+    build: .
+    environment:
+      DB_NAME: finance_bot
+      DB_USER: finance_user
+      DB_PASS: finance_pass
+      DB_HOST: 192.168.1.208
+      DB_PORT: 5432
