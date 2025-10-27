@@ -2,11 +2,11 @@
 from aiogram import Bot, Dispatcher
 from aiogram.fsm.storage.memory import MemoryStorage
 
-from BOT_TOKEN import TOKEN_PSI
+from BOT_TOKEN import TOKEN
 from bot.handlers import start, add_expense, add_profit, user_settings, menu, stats, reports, del_last_record
 
 async def main():
-    bot = Bot(TOKEN_PSI)
+    bot = Bot(TOKEN)
     dp = Dispatcher(storage=MemoryStorage())
     dp.include_routers(
         start.router,
