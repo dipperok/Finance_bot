@@ -1,0 +1,19 @@
+version: '3.9'
+
+services:
+  bot:
+    build: .
+    container_name: finance-bot
+    restart: always
+    environment:
+      DB_NAME: finance_main_db
+      DB_USER: finance_main
+      DB_PASS: finance_pass
+      DB_HOST: postgres-db
+      DB_PORT: 5432
+    networks:
+      - finance_network
+
+networks:
+  finance_network:
+    external: true
